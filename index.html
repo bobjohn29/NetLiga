@@ -391,7 +391,10 @@ const arrow=club.arrowUp
 return `
 <div class="row">
 <div class="rank">${index+1}${arrow}</div>
-<div>${club.name}</div>
+<div style="display:flex;align-items:center;gap:8px;">
+<img src="${club.image}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;">
+<span>${club.name}</span>
+</div>
 <div class="center">${club.stats.mp}</div>
 <div class="center">${club.stats.w}</div>
 <div class="center">${club.stats.l}</div>
