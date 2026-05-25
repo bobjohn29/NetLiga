@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bundesliga App</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:#f3f4f6;
+color:#07101c;
+overflow-x:hidden;
+}
+
+.app{
+max-width:430px;
+margin:auto;
+min-height:100vh;
+background:#f5f6f8;
+padding-bottom:82px;
+overflow:hidden;
+}
+
+/* PAGES */
+
+.page{
+display:none;
+min-height:100vh;
+}
+
+.page.active{
+display:block;
+}
+
+/* TOP TABS */
+
+.tabs{
+height:76px;
+background:#fff;
+display:flex;
+box-shadow:0 2px 12px rgba(0,0,0,.08);
+}
+
+.tab{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:15px;
+font-weight:900;
+letter-spacing:2px;
+color:#b3b3b3;
+position:relative;
+}
+
+.tab.active{
+color:#111;
+}
+
+.tab.active::after{
+content:"";
+position:absolute;
+bottom:0;
+width:88px;
+height:4px;
+background:#111;
+}
+
+/* COMP BAR */
+
+.comp{
+height:54px;
+background:#eef1f2;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:14px;
+}
+
+.comp span{
+background:#fff;
+padding:8px 16px;
+font-weight:900;
+font-size:14px;
+}
+
+/* TABLE */
+
+.table-head,
+.row{
+display:grid;
+grid-template-columns:
+42px
+52px
+1fr
+48px
+62px
+48px;
+
+align-items:center;
+padding-right:12px;
+}
+
+.table-head{
+height:60px;
+font-size:15px;
+}
+
+.row{
+height:58px;
+border-top:1px solid #e2e2e2;
+position:relative;
+background:#f8f8fa;
+}
+
+.bar{
+position:absolute;
+left:0;
+top:0;
+width:6px;
+height:100%;
+}
+
+.blue{background:#69b7d8;}
+.gold{background:#e4b64a;}
+.green{background:#52c653;}
+
+.rank{
+text-align:center;
+font-weight:900;
+font-size:16px;
+}
+
+.up{
+display:block;
+font-size:18px;
+line-height:5px;
+margin-bottom:4px;
+color:#5a9d70;
+}
+
+.logo{
+width:33px;
+height:33px;
+border-radius:50%;
+border:2px solid #aaa;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:9px;
+font-weight:900;
+background:#fff;
+overflow:hidden;
+}
+
+.team{
+font-size:15px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.num,
+.diff,
+.pts{
+text-align:center;
+font-size:15px;
+}
+
+.pts{
+font-weight:900;
+}
+
+/* CLUBS */
+
+.bayern{
+background:#d91f34;
+color:#fff;
+}
+
+.bvb{
+background:#ffd61e;
+border-color:#111;
+font-size:16px;
+}
+
+.rbl{
+border-radius:6px;
+color:#cf1c38;
+}
+
+.stut{
+background:#f4ead8;
+color:#a11;
+}
+
+.hoffen{
+background:#9fd2ee;
+transform:rotate(-20deg);
+border-radius:8px;
+}
+
+.lev{
+background:#f5df59;
+color:#c00;
+}
+
+.frank,
+.mainz{
+border-color:#d33;
+color:#d33;
+}
+
+.glad{
+background:#111;
+color:#fff;
+border-radius:0;
+transform:rotate(45deg);
+}
+
+.glad span{
+transform:rotate(-45deg);
+}
+
+.hsv{
+border-radius:0;
+background:
+linear-gradient(
+90deg,
+#075ca8 0 33%,
+#fff 33% 66%,
+#075ca8 66%
+);
+color:transparent;
+}
+
+/* HOME */
+
+.home-top{
+padding:18px;
+display:flex;
+gap:12px;
+overflow-x:auto;
+}
+
+.circle{
+min-width:72px;
+height:72px;
+border-radius:50%;
+border:4px solid #c92a30;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+font-size:13px;
+text-align:center;
+}
+
+.match{
+margin:0 18px 24px;
+background:#fff;
+height:74px;
+display:grid;
+grid-template-columns:70px 1fr 1fr 1fr 90px;
+align-items:center;
+text-align:center;
+font-size:16px;
+}
+
+.scorebox{
+background:#e9eef1;
+height:56px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+}
+
+.section{
+padding:22px 18px 12px;
+font-size:28px;
+font-weight:1000;
+letter-spacing:-1px;
+}
+
+.cards{
+display:flex;
+gap:12px;
+overflow-x:auto;
+padding:0 18px 30px;
+}
+
+.card{
+min-width:165px;
+height:290px;
+border-radius:6px;
+background:linear-gradient(#555,#07101c);
+display:flex;
+align-items:flex-end;
+padding:14px;
+color:#fff;
+font-size:18px;
+font-weight:900;
+}
+
+/* GAMES */
+
+.games-nav{
+height:90px;
+background:#eef1f2;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.pill{
+background:#fff;
+border-radius:30px;
+padding:16px 42px;
+font-weight:900;
+box-shadow:0 4px 18px rgba(0,0,0,.1);
+position:relative;
+text-align:center;
+}
+
+.dot{
+position:absolute;
+right:0;
+top:0;
+width:14px;
+height:14px;
+background:#d33;
+border-radius:50%;
+}
+
+.game-logo{
+margin:24px;
+width:75px;
+height:75px;
+border-radius:50%;
+border:4px solid #c92a30;
+background:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+text-align:center;
+}
+
+.day{
+height:58px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 18px;
+}
+
+.day b{
+font-size:24px;
+}
+
+.game-row{
+height:74px;
+background:#fff;
+display:grid;
+grid-template-columns:
+90px
+62px
+54px
+54px
+62px
+85px;
+
+align-items:center;
+text-align:center;
+border-top:1px solid #e2e2e2;
+}
+
+.bigscore{
+background:#e9eef1;
+height:58px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+font-weight:1000;
+}
+
+/* FANTASY */
+
+.fantasy{
+background:#111722;
+background-image:
+repeating-linear-gradient(
+45deg,
+#111 0,
+#111 8px,
+#d21f2b 8px,
+#d21f2b 11px
+);
+
+padding:24px 18px;
+}
+
+.fantasy-card{
+background:#171c25;
+padding:24px 18px 40px;
+color:#fff;
+text-align:center;
+min-height:680px;
+}
+
+.hero{
+height:320px;
+border-radius:6px;
+margin-bottom:36px;
+background:linear-gradient(#666,#171c25);
+}
+
+.fantasy h1{
+font-size:28px;
+}
+
+.fantasy p{
+margin:26px 0;
+font-size:18px;
+line-height:1.5;
+}
+
+.btn{
+background:#f24c4c;
+padding:22px;
+font-weight:900;
+letter-spacing:2px;
+}
+
+/* PROFILE */
+
+.profile-hero{
+height:310px;
+background:linear-gradient(#e6c349,#d6a52b);
+display:flex;
+align-items:flex-start;
+justify-content:center;
+padding-top:40px;
+font-size:34px;
+font-weight:1000;
+}
+
+.profile-tabs{
+height:72px;
+background:#fff;
+display:flex;
+}
+
+.profile-tabs div{
+flex:1;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+letter-spacing:2px;
+color:#aaa;
+}
+
+.profile-tabs .active{
+color:#111;
+border-bottom:4px solid #111;
+}
+
+.chips{
+padding:28px 18px;
+display:flex;
+gap:18px;
+align-items:center;
+}
+
+.chip{
+background:#fff;
+padding:17px 24px;
+border-radius:28px;
+font-weight:900;
+box-shadow:0 5px 18px rgba(0,0,0,.1);
+}
+
+.club-wrap{
+display:flex;
+gap:14px;
+padding-left:18px;
+}
+
+.club-card{
+width:120px;
+height:150px;
+background:#fff;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:18px;
+}
+
+.edit{
+text-align:center;
+margin:36px;
+font-weight:900;
+letter-spacing:2px;
+color:#ba3636;
+}
+
+/* BOTTOM NAV */
+
+.bottom{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:100%;
+max-width:430px;
+height:82px;
+background:#fff;
+border-top:1px solid #ddd;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+z-index:999;
+}
+
+.nav{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:3px;
+color:#8f8f8f;
+font-size:13px;
+cursor:pointer;
+}
+
+.nav .ico{
+font-size:28px;
+line-height:28px;
+}
+
+.nav.active{
+color:#07101c;
+font-weight:900;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+<div class="home-top">
+
+<div class="circle">DYN</div>
+<div class="circle">SCP<br>WOB</div>
+<div class="circle">RWE</div>
+<div class="circle">WOB</div>
+<div class="circle">BMG</div>
+
+</div>
+
+<div class="match">
+
+<b>🔕<br>20:30</b>
+
+<b>SCP</b>
+
+<div class="scorebox">SCP</div>
+
+<div class="scorebox">WOB</div>
+
+<span>Tickets ↗</span>
+
+</div>
+
+<h2 class="section">TOP STORIES</h2>
+
+<div class="cards">
+
+<div class="card">Das beste Rätsel der Welt</div>
+
+<div class="card">Alles offen vor Relegations-Finale</div>
+
+<div class="card">Rot-Weiss träumt weiter</div>
+
+</div>
+
+<h2 class="section">ALLE BUNDESLIGA-TORE</h2>
+
+<div class="cards">
+
+<div class="card">⚽</div>
+
+<div class="card">⚽</div>
+
+</div>
+
+</section>
+
+<!-- GAMES -->
+
+<section id="games" class="page">
+
+<div class="comp">
+
+<span>🇩🇪</span>
+<span>20<br>26</span>
+<span>🏆</span>
+<span>⚽</span>
+
+</div>
+
+<div class="games-nav">
+
+<div style="margin-right:24px">
+SPIELTAG 34<br>16.05.
+</div>
+
+<div class="pill">
+RELEGATION<br>21.05 - 25.05.
+<div class="dot"></div>
+</div>
+
+</div>
+
+<div class="game-logo">
+WOB<br>SCP
+</div>
+
+<div class="day">
+
+<b>DONNERSTAG</b>
+
+<span>21.05.</span>
+
+</div>
+
+<div class="game-row">
+
+<b>Beendet</b>
+
+<b>WOB</b>
+
+<div class="bigscore">0</div>
+
+<div class="bigscore">0</div>
+
+<b>SCP</b>
+
+<span>▶</span>
+
+</div>
+
+<div class="day">
+
+<b>MONTAG</b>
+
+<span>25.05.</span>
+
+</div>
+
+<div class="game-row">
+
+<b>🔕<br>20:30</b>
+
+<b>SCP</b>
+
+<div class="bigscore">SCP</div>
+
+<div class="bigscore">WOB</div>
+
+<b>WOB</b>
+
+<span>Tickets ↗</span>
+
+</div>
+
+</section>
+
+<!-- TABLE -->
+
+<section id="tablepage" class="page">
+
+<div class="comp">
+
+<span>🇩🇪</span>
+<span>2</span>
+<span>20<br>26</span>
+<span>🏆</span>
+<span>⚽</span>
+
+</div>
+
+<div class="tabs">
+
+<div class="tab active">TABELLE</div>
+
+<div class="tab">STATISTIKEN</div>
+
+</div>
+
+<div class="table-head">
+
+<div></div>
+<div></div>
+<div></div>
+
+<div>SP</div>
+
+<div>DIFF</div>
+
+<div><b>P</b></div>
+
+</div>
+
+<div id="table"></div>
+
+</section>
+
+<!-- FANTASY -->
+
+<section id="fantasy" class="page fantasy">
+
+<div class="fantasy-card">
+
+<div class="hero"></div>
+
+<h1>BUNDESLIGA FANTASY MANAGER</h1>
+
+<p>
+Erstelle dein Traumteam und sammle Punkte basierend auf realen Spielerleistungen.
+</p>
+
+<div class="btn">LOS GEHT'S</div>
+
+<p style="font-size:13px;color:#aaa">
+Presented by<br><b>EA SPORTS</b>
+</p>
+
+</div>
+
+</section>
+
+<!-- PROFILE -->
+
+<section id="profile" class="page">
+
+<div class="profile-hero">
+MEIN PROFIL
+</div>
+
+<div class="profile-tabs">
+
+<div class="active">ÜBERSICHT</div>
+
+<div>EINSTELLUNGEN</div>
+
+</div>
+
+<div class="chips">
+
+<div class="chip">MEINE CLUBS</div>
+
+<b style="color:#888">MEINE SPIELER</b>
+
+</div>
+
+<div class="club-wrap">
+
+<div class="club-card">
+
+<div class="circle" style="width:60px;height:60px;min-width:60px">
+D
+</div>
+
+<span>Dresden</span>
+
+</div>
+
+<div class="club-card">
+
+<div style="font-size:48px;color:#ddd">
+＋
+</div>
+
+<span>Club hinzufügen</span>
+
+</div>
+
+</div>
+
+<div class="edit">
+AUSWAHL BEARBEITEN
+</div>
+
+<h2 class="section">MEINE TORE</h2>
+
+</section>
+
+</div>
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom">
+
+<div class="nav active" data-page="home">
+
+<div class="ico">⚽</div>
+
+<span>Home</span>
+
+</div>
+
+<div class="nav" data-page="games">
+
+<div class="ico">▣</div>
+
+<span>Spiele</span>
+
+</div>
+
+<div class="nav" data-page="tablepage">
+
+<div class="ico">🏆</div>
+
+<span>Tabelle</span>
+
+</div>
+
+<div class="nav" data-page="fantasy">
+
+<div class="ico">♕</div>
+
+<span>Fantasy</span>
+
+</div>
+
+<div class="nav" data-page="profile">
+
+<div class="ico">◉</div>
+
+<span>Profil</span>
+
+</div>
+
+</nav>
+
+<script>
+
+const teams=[
+
+[1,"bayern","FC Bayern München",34,"+86",89,"blue"],
+[2,"bvb","Borussia Dortmund",34,"+36",73,"blue"],
+[3,"rbl","RB Leipzig",34,"+19",65,"blue"],
+[4,"stut","VfB Stuttgart",34,"+22",62,"blue"],
+[5,"hoffen","TSG Hoffenheim",34,"+13",61,"gold"],
+[6,"lev","Bayer 04 Leverkusen",34,"+21",59,"gold"],
+[7,"frei","SC Freiburg",34,"-6",47,"green"],
+[8,"frank","Eintracht Frankfurt",34,"-4",44],
+[9,"aug","FC Augsburg",34,"-16",43],
+[10,"mainz","1. FSV Mainz 05",34,"-9",40],
+[11,"union","1. FC Union Berlin",34,"-14",39,"",true],
+[12,"glad","Borussia Mönchengladbach",34,"-11",38,"",true],
+[13,"hsv","Hamburger SV",34,"-14",38]
+
+];
+
+const logos={
+
+bayern:"FCB",
+bvb:"BVB",
+rbl:"RB",
+stut:"VfB",
+hoffen:"",
+lev:"B04",
+frei:"SC",
+frank:"◉",
+aug:"FCA",
+mainz:"05",
+union:"UNION",
+glad:"<span>B</span>",
+hsv:"HSV"
+
+};
+
+document.getElementById("table").innerHTML=teams.map(t=>`
+
+<div class="row">
+
+<div class="bar ${t[6]||""}"></div>
+
+<div class="rank">
+${t[7]?'<span class="up">⌃</span>':""}
+${t[0]}
+</div>
+
+<div class="logo ${t[1]}">
+${logos[t[1]]}
+</div>
+
+<div class="team">
+${t[2]}
+</div>
+
+<div class="num">
+${t[3]}
+</div>
+
+<div class="diff">
+${t[4]}
+</div>
+
+<div class="pts">
+${t[5]}
+</div>
+
+</div>
+
+`).join("");
+
+document.querySelectorAll(".nav").forEach(btn=>{
+
+btn.onclick=()=>{
+
+document.querySelectorAll(".nav").forEach(n=>
+n.classList.remove("active")
+);
+
+document.querySelectorAll(".page").forEach(p=>
+p.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+document.getElementById(
+btn.dataset.page
+).classList.add("active");
+
+window.scrollTo(0,0);
+
+};
+
+});
+
+</script>
+</body>
+</html>
