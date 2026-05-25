@@ -1,0 +1,212 @@
+/* REPLACE YOUR CURRENT CSS WITH THIS SCALED VERSION */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#f3f3f5;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}
+
+.app{
+  width:100%;
+  max-width:430px; /* THIS FIXES THE HUGE SCALE */
+  margin:auto;
+  background:#f7f7f8;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+
+/* TOP */
+
+.top-tabs{
+  height:88px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:flex-end;
+  box-shadow:0 2px 18px rgba(0,0,0,.12);
+}
+
+.tab{
+  height:88px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:20px;
+  font-size:17px; /* SMALLER */
+  font-weight:800;
+  letter-spacing:2px;
+  color:#b2b2b2;
+  position:relative;
+  width:50%;
+}
+
+.tab.active{
+  color:#222;
+}
+
+.tab.active::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  width:90px;
+  height:4px;
+  background:#222;
+}
+
+/* HEADER */
+
+.header{
+  height:70px;
+  display:grid;
+  grid-template-columns:40px 48px 1fr 50px 70px 55px;
+  align-items:center;
+  padding:0 16px 0 0;
+  color:#222;
+  font-size:17px;
+}
+
+.header div{
+  text-align:center;
+}
+
+.header .empty{
+  text-align:left;
+}
+
+/* ROWS */
+
+.row{
+  position:relative;
+  display:grid;
+  grid-template-columns:40px 48px 1fr 50px 70px 55px;
+  align-items:center;
+  height:72px; /* SMALLER */
+  padding-right:16px;
+  border-top:1px solid #e3e3e5;
+  background:#f7f7f8;
+}
+
+/* LEFT COLOR BAR */
+
+.stripe{
+  position:absolute;
+  left:0;
+  top:0;
+  width:6px;
+  height:100%;
+}
+
+.blue{background:#66b7da;}
+.gold{background:#e3b447;}
+.green{background:#4fc54f;}
+
+/* POSITION */
+
+.rank{
+  font-size:17px;
+  font-weight:800;
+  text-align:center;
+  color:#111;
+}
+
+/* LOGOS */
+
+.logo{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:10px;
+  font-weight:800;
+  overflow:hidden;
+}
+
+/* TEAM */
+
+.team{
+  font-size:18px; /* SMALLER */
+  color:#111;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  padding-left:8px;
+}
+
+/* STATS */
+
+.num,
+.diff,
+.pts{
+  text-align:center;
+  font-size:18px;
+  color:#111;
+}
+
+.pts{
+  font-weight:800;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  height:78px;
+  background:#fff;
+  border-top:1px solid #ddd;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#9d9d9d;
+  font-size:14px;
+  gap:3px;
+}
+
+.nav svg{
+  width:28px;
+  height:28px;
+}
+
+.nav.active{
+  color:#111;
+  font-weight:800;
+}
+
+/* MOBILE SAFE */
+
+@media(max-width:430px){
+
+  .team{
+    font-size:16px;
+  }
+
+  .num,
+  .diff,
+  .pts{
+    font-size:16px;
+  }
+
+  .header{
+    font-size:15px;
+  }
+
+}
